@@ -1,16 +1,19 @@
 <template>
- <div class="modal">
-    <div class="modal-content">
-        <h3>Confirm Deletion</h3>
-        <p>Are you sure you want to delete this note?</p>
-        <button
-          @click="$emit('update:modelValue', false)"
-          class="cancel-button"
-        >
-          Cancel</button>
-        <button class="delete-button" >Confirm</button>
-    </div>
-</div>
+  <div class="modal">
+      <div class="modal-content">
+          <h3>Confirm Deletion</h3>
+          <p>Are you sure you want to delete this note?</p>
+          <button
+            @click="cancelDelete"
+            class="cancel-button"
+          >
+            Cancel</button>
+          <button
+            @click="confirmDelete"
+            class="delete-button"
+          >Confirm</button>
+      </div>
+  </div>
 </template>
 
 <script setup>
@@ -22,8 +25,22 @@ import { useNotesStore } from '@/stores/notesStore.js'
 // stores
 const notesStore = useNotesStore()
 
-const props = defineProps(['modelValue'])
+const props = defineProps(['modelValue', 'noteId'])
 const emit = defineEmits(['update:modelValue'])
+
+//////////////////////////////
+// click hundler for cancel and delete
+const cancelDelete = () => {
+  emit('update:modelValue', false)
+}
+
+const confirmDelete = () => {
+  console.log(props.noteId);
+  notesStore.deleteNote(props.noteId).then(()=>{
+    emit('update:modelValue', false)
+    notesStore.getNotes()
+  })
+}
 
 </script>
 

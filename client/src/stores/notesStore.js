@@ -11,24 +11,26 @@ export const useNotesStore = defineStore('noteStore', {
   //   doubleCount: (state) => state.count * 2,
   // },
   actions: {
-    // post new note
+    //////////////////////////////
+    // CRUD for posts
     async createNote(newNote) {
-      axios.post(API_URL, newNote)
-      .then((response) => {
-        console.log(response);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-
+      await axios.post(API_URL, newNote)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     },
+
     async getNotes() {
-      console.log(this);
-      axios.get(API_URL)
+      await axios.get(API_URL)
         .then((response) => {
           // handle success
-          const newNotes = response.data
-          this.notes = newNotes
+          console.log(`getNotes-------`);
+          console.log(this.notes);
+          this.notes = response.data
+          console.log(this.notes)
         })
         .catch((error) => {
           // handle error
@@ -39,9 +41,19 @@ export const useNotesStore = defineStore('noteStore', {
         });
     },
 
-    updateNote() {
+    async updateNote() {
       return
     },
+
+    async deleteNote(note_id) {
+      await axios.delete(`${API_URL}/${note_id}`)
+        .then(response => {
+          console.log(`Deleted post with ID ${note_id}`);
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    }
 
   },
 })

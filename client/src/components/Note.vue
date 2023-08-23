@@ -4,9 +4,9 @@
         <p class="note-content">{{ content }}</p>
         <div class="btn-container">
           <button class="btn edit-button" @click="editNote">Edit</button>
-          <button class="btn delete-button" @click="deleteClicked = true">Delete</button>
+          <button class="btn delete-button" @click="deleteNote">Delete</button>
         </div>
-        <DeleteModal v-if="deleteClicked" v-model="deleteClicked"/>
+        <DeleteModal v-if="deleteIsClicked" v-model="deleteIsClicked" :noteId="id"/>
     </li>
 </template>
 
@@ -18,6 +18,10 @@ import DeleteModal from './DeleteModal.vue';
 import { ref } from 'vue';
 
 //////////////////////////////
+// Local Valiable
+const deleteIsClicked = ref(false)
+
+//////////////////////////////
 // props
 const props = defineProps(["id", "title", "content"])
 
@@ -25,7 +29,12 @@ const props = defineProps(["id", "title", "content"])
 // stores
 const notesStore = useNotesStore()
 
-const deleteClicked = ref(false)
+//////////////////////////////
+// when delite clicked
+const deleteNote = () => {
+  deleteIsClicked.value = true
+}
+
 
 </script>
 
