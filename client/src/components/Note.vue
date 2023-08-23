@@ -2,7 +2,10 @@
     <li class="note">
         <h2 class="note-title">{{ title }}</h2>
         <p class="note-content">{{ content }}</p>
-        <button class="delete-button" @click="deleteClicked = true">Delete</button>
+        <div class="btn-container">
+          <button class="btn edit-button" @click="editNote">Edit</button>
+          <button class="btn delete-button" @click="deleteClicked = true">Delete</button>
+        </div>
         <DeleteModal v-if="deleteClicked" v-model="deleteClicked"/>
     </li>
 </template>
@@ -23,7 +26,7 @@ const props = defineProps(["id", "title", "content"])
 const notesStore = useNotesStore()
 
 const deleteClicked = ref(false)
-const onDelete = () => deleteClicked.value = false
+
 </script>
 
 <style scoped>
@@ -56,18 +59,34 @@ h1 {
 }
 
 /* Button styles */
+.btn-container {
+  display: flex;
+  justify-content: end;
+}
+.btn {
+  width: 6rem;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
 .delete-button {
     background-color: #ff4d4f;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 5px 10px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.2s;
 }
 
 .delete-button:hover {
-    background-color: #d40c11;
+    background-color: #ff2125;
+}
+
+.edit-button {
+    background-color: #50C878;
+    margin-right: .5rem;
+}
+
+.edit-button:hover {
+    background-color: #2bc05d;
 }
 </style>

@@ -20,7 +20,7 @@
           ></textarea>
           <div class="btn-container">
             <button class="btn cancel-btn" @click="cancelEdit">Cancel</button>
-            <button class="btn submit-btn" @click="updatePost">Save</button>
+            <button class="btn submit-btn" @click="savePost">Save</button>
           </div>
         </form>
   </div>
@@ -30,11 +30,29 @@
 //////////////////////////////
 // imports
 import { reactive, ref } from 'vue';
+import { useNotesStore } from '@/stores/notesStore.js'
+
+//////////////////////////////
+// stores
+const notesStore = useNotesStore()
 
 //////////////////////////////
 // input
 const enteredTitle = ref("")
 const enteredContent = ref("")
+
+//////////////////////////////
+// save new post
+const savePost = () => {
+  const newPost = {
+    title: enteredTitle.value,
+    content: enteredContent.value,
+  }
+  notesStore.createNote(newPost)
+  notesStore.getNotes()
+  enteredTitle.value = ""
+  enteredContent.value = ""
+}
 
 </script>
 
