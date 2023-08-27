@@ -14,45 +14,39 @@ export const useNotesStore = defineStore('noteStore', {
     //////////////////////////////
     // CRUD for posts
     async createNote(newNote) {
-      await axios.post(API_URL, newNote)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      try {
+        await axios.post(API_URL, newNote)
+      } catch(error) {
+        alert("Invalid post request")
+      }
     },
 
     async getNotes() {
-      await axios.get(API_URL)
-        .then((response) => {
-          // handle success
-          console.log(`getNotes-------`);
-          console.log(this.notes);
-          this.notes = response.data
-          console.log(this.notes)
-        })
-        .catch((error) => {
-          // handle error
-          console.log(error);
-        })
-        .finally(() => {
-          // always executed
-        });
+      try {
+        const res = await axios.get(API_URL)
+        this.notes = res.data
+      } catch(error) {
+        alert("Invalid get request")
+        console.log(error);
+      }
     },
 
-    async updateNote() {
-      return
+    async updateNote(updatedNote, noteId) {
+      try {
+        await axios.patch(`${API_URL}/${noteId}`, updatedNote)
+      } catch(error) {
+        alert("Invalid patch request")
+        console.log(error);
+      }
     },
 
     async deleteNote(note_id) {
-      await axios.delete(`${API_URL}/${note_id}`)
-        .then(response => {
-          console.log(`Deleted post with ID ${note_id}`);
-        })
-        .catch(error => {
-          console.error(error);
-        });
+      try {
+        await axios.delete(`${API_URL}/${note_id}`)
+      } catch(error) {
+        alert("Invalid delete request")
+        console.error(error);
+      }
     }
 
   },

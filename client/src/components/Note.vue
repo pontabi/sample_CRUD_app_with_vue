@@ -7,6 +7,13 @@
           <button class="btn delete-button" @click="deleteNote">Delete</button>
         </div>
         <DeleteModal v-if="deleteIsClicked" v-model="deleteIsClicked" :noteId="id"/>
+        <EditModal
+          v-if="editIsClicked"
+          v-model="editIsClicked"
+          :noteId="id"
+          :noteTitle="title"
+          :noteContent="content"
+        />
     </li>
 </template>
 
@@ -15,11 +22,13 @@
 // imports
 import { useNotesStore } from '@/stores/notesStore.js'
 import DeleteModal from './DeleteModal.vue';
+import EditModal from './EditModal.vue';
 import { ref } from 'vue';
 
 //////////////////////////////
 // Local Valiable
 const deleteIsClicked = ref(false)
+const editIsClicked = ref(false)
 
 //////////////////////////////
 // props
@@ -33,6 +42,12 @@ const notesStore = useNotesStore()
 // when delite clicked
 const deleteNote = () => {
   deleteIsClicked.value = true
+}
+
+//////////////////////////////
+// when edit clicked
+const editNote = () => {
+  editIsClicked.value = true
 }
 
 

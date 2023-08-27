@@ -1,7 +1,8 @@
 <template>
-  <div class="container">
-      <h1>Post your note</h1>
-      <form class="crud-form" @submit.prevent>
+  <div class="modal">
+    <div class="modal-content">
+        <h1>Edit your note</h1>
+        <form class="crud-form" @submit.prevent>
           <label for="title">Title:</label>
           <input
             v-model="enteredTitle"
@@ -20,9 +21,10 @@
           ></textarea>
           <div class="btn-container">
             <button class="btn cancel-btn" @click="cancelEdit">Cancel</button>
-            <button class="btn submit-btn" @click="savePost">Save</button>
+            <button class="btn submit-btn" @click="updateNote">Update</button>
           </div>
         </form>
+    </div>
   </div>
 </template>
 
@@ -37,33 +39,58 @@ import { useNotesStore } from '@/stores/notesStore.js'
 const notesStore = useNotesStore()
 
 //////////////////////////////
+// props
+const props = defineProps(["modelValue", "noteId", "noteTitle", "noteContent"])
+const emit = defineEmits(['update:modelValue'])
+
+//////////////////////////////
 // input
-const enteredTitle = ref("")
-const enteredContent = ref("")
+const enteredTitle = ref(props.noteTitle)
+const enteredContent = ref(props.noteContent)
 
 //////////////////////////////
 // save new post
-const savePost = async() => {
-  const newPost = {
+const updateNote = async() => {
+  const updatedNote = {
     title: enteredTitle.value,
     content: enteredContent.value,
   }
-  await notesStore.createNote(newPost)
-  notesStore.getNotes()
-  enteredTitle.value = ""
-  enteredContent.value = ""
+  await notesStore.updateNote(updatedNote, props.noteId)
+  await notesStore.getNotes()
+  emit("update:modelValue", false)
+}
+
+//////////////////////////////
+// cancel edit
+const cancelEdit = () => {
+  emit("update:modelValue", false)
 }
 
 </script>
 
 <style scoped>
-.container {
-    max-width: 600px;
-    margin: 0 auto;
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
     padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 500px;
+    margin: 0 auto;
 }
 
 h1 {

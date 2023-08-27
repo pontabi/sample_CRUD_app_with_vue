@@ -25,6 +25,8 @@ import { useNotesStore } from '@/stores/notesStore.js'
 // stores
 const notesStore = useNotesStore()
 
+//////////////////////////////
+// props
 const props = defineProps(['modelValue', 'noteId'])
 const emit = defineEmits(['update:modelValue'])
 
@@ -34,12 +36,10 @@ const cancelDelete = () => {
   emit('update:modelValue', false)
 }
 
-const confirmDelete = () => {
-  console.log(props.noteId);
-  notesStore.deleteNote(props.noteId).then(()=>{
-    emit('update:modelValue', false)
-    notesStore.getNotes()
-  })
+const confirmDelete = async() => {
+  await notesStore.deleteNote(props.noteId)
+  await notesStore.getNotes()
+  emit('update:modelValue', false)
 }
 
 </script>
